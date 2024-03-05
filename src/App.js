@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" >
           {/*  CONTENT CONTAINER  */}
           <div
             style={{

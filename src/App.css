@@ -45,5 +45,6 @@ body {
 @font-face {
   font-family: Popin;
   src: url("/public/Font/Popin/MadimiOne-Regular.ttf");
-  weight: 400;
+  /* src: url("/public/Font/Kode-Momo/KodeMono-VariableFont_wght.ttfublic/Font/Kode-Momo/"); */
+  weight: 300;
 }

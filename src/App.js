@@ -1,5 +1,7 @@
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { useEffect } from "react";
+import { useState } from "react";
 
 // MATERIEL UI COMPONENTS
 import Typography from "@mui/material/Typography";
@@ -7,16 +9,65 @@ import Container from "@mui/material/Container";
 import CloudIcon from "@mui/icons-material/Cloud";
 import Button from "@mui/material/Button";
 
+// API REQUEST
+import axios from "axios";
+import moment from "moment";
+
 const theme = createTheme({
   typography: {
     fontFamily: "Popin",
   },
 });
+
+let cancelAxios = null;
+
 function App() {
+  const [dateAndTime, setDateAndTime] = useState("");
+  const [temps, setTemp] = useState({
+    number: null,
+    description: "",
+    min: null,
+    max: null,
+    icon: null,
+  });
+  useEffect(() => {
+    setDateAndTime(moment().format("ddd Do MMMM YYYY"));
+    axios
+      .get(
+        "https://api.openweathermap.org/data/2.5/weather?lat=32.88&lon=-6.90&appid=6f5f034369ce1670ee5a4dc03a128b84"
+      )
+      .then(function (response) {
+        // console.log(response);
+        const res = response.data;
+        // console.log(res);
+        const responseTemp = Math.round(res.main.temp - 272.15);
+        const min = Math.round(res.main.temp_min - 272.15);
+        const max = Math.round(res.main.temp_max - 272.15);
+        const description = res.weather[0].description;
+        const icons = res.weather[0].icon;
+
+        setTemp({
+          number: responseTemp,
+          description: description,
+          min: min,
+          max: max,
+          icon: icons,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    return () => {
+      if (cancelAxios) {
+        cancelAxios();
+      }
+    };
+  }, []);
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <Container maxWidth="sm" >
+        <Container maxWidth="sm">
           {/*  CONTENT CONTAINER  */}
           <div
             style={{
@@ -49,13 +100,13 @@ function App() {
                   }}
                 >
                   <Typography variant="h2" style={{ marginLeft: "20px" }}>
-                    RABAT
+                    KHOURIBGA
                   </Typography>
                   <Typography
                     variant="h6"
                     style={{ marginLeft: "20px", color: "white" }}
                   >
-                    TUE 05 MARCH 2024
+                    {dateAndTime}
                   </Typography>
                 </div>
                 {/* <<<<<< CITY & TIME >>>>>> */}
@@ -69,13 +120,24 @@ function App() {
                   {/* DEGREE & DESCRIPTION*/}
                   <div>
                     {/* TEMP */}
-                    <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignContent: "center",
+                      }}
+                    >
                       <Typography variant="h1" style={{ textAlign: "right" }}>
-                        38
+                        {temps.number}
                       </Typography>
+                      <img
+                        alt=""
+                        src={`https://openweathermap.org/img/wn/${temps.icon}@2x.png`}
+                        style={{ marginBottom: "10px" }}
+                      />
                     </div>
                     {/* <<<<< TEMP >>>>> */}
-                    <Typography variant="h6">Broken Cloud</Typography>
+                    <Typography variant="h6">{temps.description}</Typography>
                     {/* MIN & MAX */}
                     <div
                       style={{
@@ -84,9 +146,9 @@ function App() {
                         alignItems: "center",
                       }}
                     >
-                      <h5>MIN : 10</h5>
+                      <h5>MIN :{temps.min}</h5>
                       <h5 style={{ margin: "0px 4px" }}>|</h5>
-                      <h5>MAX : 10</h5>
+                      <h5>MAX :{temps.max}</h5>
                     </div>
                   </div>
                   {/*<<<<<<<< DEGREE & DESCRIPTION >>>>>>*/}

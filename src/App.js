@@ -3,15 +3,18 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 
-// MATERIEL UI COMPONENTS
+//? MATERIEL UI COMPONENTS
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import CloudIcon from "@mui/icons-material/Cloud";
 import Button from "@mui/material/Button";
 
-// API REQUEST
+//? API REQUEST
 import axios from "axios";
 import moment from "moment";
+
+//? TRANSLATIONS PAGE
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme({
   typography: {
@@ -21,7 +24,10 @@ const theme = createTheme({
 
 let cancelAxios = null;
 
+// * FUNTIONS
+
 function App() {
+  const { t, i18n } = useTranslation();
   const [dateAndTime, setDateAndTime] = useState("");
   const [temps, setTemp] = useState({
     number: null,
@@ -30,6 +36,14 @@ function App() {
     max: null,
     icon: null,
   });
+
+  function handleChangeCkick() {
+
+  }
+
+  useEffect(() => {
+    i18n.changeLanguage("ar");
+  }, []);
   useEffect(() => {
     setDateAndTime(moment().format("ddd Do MMMM YYYY"));
     axios
@@ -100,7 +114,7 @@ function App() {
                   }}
                 >
                   <Typography variant="h2" style={{ marginLeft: "20px" }}>
-                    KHOURIBGA
+                    {t("KHOURIBGA")}
                   </Typography>
                   <Typography
                     variant="h6"
@@ -169,7 +183,13 @@ function App() {
                 marginTop: "7px",
               }}
             >
-              <Button variant="text" sx={{ color: "white" }}>
+              <Button
+                onClick={() => {
+                  handleChangeCkick();
+                }}
+                variant="text"
+                sx={{ color: "white" }}
+              >
                 Arabic
               </Button>
             </div>

@@ -11,24 +11,27 @@ import Button from "@mui/material/Button";
 
 //? API REQUEST
 import axios from "axios";
+import "moment/min/locales";
+// import "moment/locale/locales";
 import moment from "moment";
 
 //? TRANSLATIONS PAGE
 import { useTranslation } from "react-i18next";
+moment.locale = "en";
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Popin",
+    fontFamily: "Popin , arabic",
+    // fontFamily: "Popin ",
   },
 });
 
 let cancelAxios = null;
 
-// * FUNTIONS
-
 function App() {
   const { t, i18n } = useTranslation();
   const [dateAndTime, setDateAndTime] = useState("");
+  const [locale, setLocale] = useState("ar");
   const [temps, setTemp] = useState({
     number: null,
     description: "",
@@ -38,14 +41,21 @@ function App() {
   });
 
   function handleChangeCkick() {
-
+    if (locale === "ar") {
+      setLocale("en");
+      i18n.changeLanguage("en");
+    } else {
+      setLocale("ar");
+      i18n.changeLanguage("ar");
+    }
+    setDateAndTime(moment().format("dddd Do MMMM  h:mm a"));
   }
 
   useEffect(() => {
     i18n.changeLanguage("ar");
   }, []);
   useEffect(() => {
-    setDateAndTime(moment().format("ddd Do MMMM YYYY"));
+    setDateAndTime(moment().format("ddd Do MMMM  h:mm a"));
     axios
       .get(
         "https://api.openweathermap.org/data/2.5/weather?lat=32.88&lon=-6.90&appid=6f5f034369ce1670ee5a4dc03a128b84"
@@ -94,6 +104,7 @@ function App() {
           >
             {/* CARD */}
             <div
+              dir={locale === "en" ? "ltr" : "rtl"}
               style={{
                 background: "#3559E0",
                 width: "100%",
@@ -115,6 +126,7 @@ function App() {
                 >
                   <Typography variant="h2" style={{ marginLeft: "20px" }}>
                     {t("KHOURIBGA")}
+                    {/* KHOURIBGA */}
                   </Typography>
                   <Typography
                     variant="h6"
@@ -151,7 +163,7 @@ function App() {
                       />
                     </div>
                     {/* <<<<< TEMP >>>>> */}
-                    <Typography variant="h6">{temps.description}</Typography>
+                    <Typography variant="h6">{t(temps.description)}</Typography>
                     {/* MIN & MAX */}
                     <div
                       style={{
@@ -160,9 +172,13 @@ function App() {
                         alignItems: "center",
                       }}
                     >
-                      <h5>MIN :{temps.min}</h5>
+                      <h5>
+                        {t("MIN")} :{temps.min}
+                      </h5>
                       <h5 style={{ margin: "0px 4px" }}>|</h5>
-                      <h5>MAX :{temps.max}</h5>
+                      <h5>
+                        {t("MAX")} :{temps.max}
+                      </h5>
                     </div>
                   </div>
                   {/*<<<<<<<< DEGREE & DESCRIPTION >>>>>>*/}
@@ -190,7 +206,7 @@ function App() {
                 variant="text"
                 sx={{ color: "white" }}
               >
-                Arabic
+                {locale == "en" ? "Arabic" : "English"}
               </Button>
             </div>
             {/* // ? <<<<<< TRANSALTION BUTTON >>>>> */}

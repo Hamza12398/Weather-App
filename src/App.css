@@ -9,7 +9,7 @@
 
 body {
   /* background-color: #0F2167; */
-  background-color: #4CB9E7;
+  background-color: #4cb9e7;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -47,4 +47,9 @@ body {
   src: url("/public/Font/Popin/MadimiOne-Regular.ttf");
   /* src: url("/public/Font/Kode-Momo/KodeMono-VariableFont_wght.ttfublic/Font/Kode-Momo/"); */
   weight: 300;
+}
+
+@font-face {
+  font-family: Arabic;
+  src: url("/public/Font/arabic/NotoKufiArabic-VariableFont_wght.ttf");
 }
